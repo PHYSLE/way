@@ -11,18 +11,19 @@ function Cell (x, y, bias, parent = null) {
     //distance from end
     var h = Math.abs(this.x - end.x) + Math.abs(this.y - end.y);
     // @todo - add bias
-    return g + h;
+    return g + h - this.bias;
   }
 }
 
 function Grid (width, height) {
+  this.locked = false;
   this.width = width;
   this.height = height;
+  this.count = 0;
   this.cells = new Array(height);
   for (var i = 0; i < this.cells.length; i++) {
     this.cells[i] = new Array(width);
   }
-  this.count = 0;
 
   this.getCell = function(x, y) {
     if (x < 0 || y < 0 || x >= this.width || y >= this.height) {
@@ -36,10 +37,10 @@ function Grid (width, height) {
       throw 'Vector out of bounds';
     }
     // if there was no cell defined here increment count
-    if (!this.cells[y][x]) {
+    if (!this.cells[cell.y][cell.x]) {
       this.count++;
     }
-    this.cells[y][x] = cell;
+    this.cells[cell.y][cell.x] = cell;
   }
 
   this.removeCell = function(x, y) {
@@ -117,8 +118,16 @@ function Grid (width, height) {
     return false;
   }
   this.findWay = function(start, end) {
+    if (this.locked) {
+      return null;
+    }
+    this.locked = true;
     var open = [];
     var closed = [];
+
+    this.eachCell(function(c) {
+      c.parent = null;
+    });
 
     open.push(start);
     var runs = 0;
@@ -128,11 +137,12 @@ function Grid (width, height) {
       if (current == end) {
         console.log('Found in ' + runs)
         var c = current;
-        var way = []
+        var way = [];
         while(c) {
-          way.unshift(c);
+          way.unshift({x:c.x, y:c.y});
           c = c.parent;
         }
+        this.locked = false;
         return way;
       }
       var ways = this.waysFromCell(current);
@@ -155,18 +165,23 @@ function Grid (width, height) {
       }
 
       if (runs > this.width * this.height) {
+        this.locked = false;
         console.log('Too Long!')
         return null;
       }
       runs++;
     }
     console.log('Blocked')
+    this.locked = false;
     return null;
 
   }
 
 
   /*
+  //https://pavcreations.com/tilemap-based-a-star-algorithm-implementation-in-unity-game/
+  //http://theory.stanford.edu/~amitp/GameProgramming/AStarComparison.html
+
   OPEN_LIST
   CLOSED_LIST
   ADD start_cell to OPEN_LIST

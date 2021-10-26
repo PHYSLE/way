@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<style>
+td {border: 1px solid #ccc; width:20px; height: 20px;}
+
+</style>
+<script src="way.js"></script>
+<script>
+var grid = new Grid(10, 10);
+for(var x=0; x < grid.width; x++) {
+  for(var y=0; y < grid.height; y++) {
+    var b = Math.floor(Math.random() * 4);
+    if (x==0 && y==0) {
+      b = 1;
+    }
+    if (x==9 && y==9) {
+      b = 1;
+    }
+    var c = new Cell(x, y, b);
+    grid.setCell(c);
+  }
+}
+
+
+var html = '<table><tr>'
+var y = 0;
+grid.eachCell(function(c) {
+  if (c.y != y) {
+    html += '</tr><tr>';
+    y = c.y;
+  }
+  html += '<td id="'+c.x+'_'+c.y+'">' + (c.bias == 0 ? '#' : '.') + '</td>'
+
+
+})
+html += '</tr></table>'
+html += grid.count + ' cells';
+
+
+var way = grid.findWay(grid.getCell(0,0),grid.getCell(9,9));
+
+</script>
+</head>
+<body>
+<div id="output"></div>
+<script>
+document.getElementById('output').innerHTML = html;
+if (way) {
+  for (var w=0; w<way.length; w++) {
+    var el = document.getElementById(way[w].x + '_' + way[w].y);
+    el.style.backgroundColor = '#900';
+  }
+}
+else {
+  document.getElementById('output').innerHTML += "<br /> NO PATH";
+}
+</script>
+</body>
+</html>

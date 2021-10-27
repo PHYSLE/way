@@ -12,13 +12,11 @@
 var grid = new Grid(20, 20);
 for(var x=0; x < grid.width; x++) {
   for(var y=0; y < grid.height; y++) {
-    var b = Math.floor(Math.random() * 4);
-    if (x==0 && y==0) {
+    var b = Math.floor(Math.random() * 4) == 0 ? 0 : 1;
+    if ((x==0 && y==0) || (x==9 && y==9)) {
       b = 1;
     }
-    if (x==9 && y==9) {
-      b = 1;
-    }
+
     var c = new Cell(x, y, b);
     grid.setCell(c);
   }

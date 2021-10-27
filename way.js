@@ -3,7 +3,7 @@ function Cell (x, y, bias, parent = null) {
   this.y = y;
   this.bias = bias;
   this.parent = parent;
-
+  // @todo - keep a running tally of g and lose the while loop
   this.wayCost = function(start, end) {
     // distance from start
     var g = 1;
@@ -86,7 +86,7 @@ function Grid (width, height) {
   }
 
   this.findBest = function(array, start, end) {
-    // This operation can occur in O(1) time if open is a min-heap or a priority queue
+    // @todo - could we sort open by wayCost desc and take open[0]?
     var best = null;
     for (var i = 0; i < array.length; i++) {
       if (!best || array[i].wayCost(start, end) < best.wayCost(start, end)) {

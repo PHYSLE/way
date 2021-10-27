@@ -1,16 +1,14 @@
 function Cell (x, y, bias, parent = null) {
   this.x = x;
   this.y = y;
-  //this.f = 0;
-  //this.g = 0;
   this.bias = bias;
   this.parent = parent;
   this.wayCost = function(start, end) {
-    //distance from start
+    // distance from start
     var g = Math.abs(this.x - start.x) + Math.abs(this.y - start.y);
-    //distance from end
+    // distance from end
     var h = Math.abs(this.x - end.x) + Math.abs(this.y - end.y);
-    // @todo - add bias
+    // bias
     return g + h - this.bias;
   }
 }
@@ -61,66 +59,42 @@ function Grid (width, height) {
     }
   }
 
-  this.waysFromCell = function(c) {
-    var a = [];
-    if (c.x - 1 >= 0) {
-      var left = this.getCell(c.x - 1, c.y);
-      if (left && left.bias > 0) {
-        a.push(left);
+  this.waysFromCell = function(cell, diagonal) {
+    var ways = [];
+
+    for (var degree = 0; degree <360; degree += diagonal ? 45 : 90 ) {
+      var v = {
+        x: Math.round(1 * Math.cos(degree * Math.PI / 180) + cell.x),
+        y: Math.round(1 * Math.sin(degree * Math.PI / 180) + cell.y)
+      }
+      if (v.x >= 0 && v.y >= 0 && v.x < this.width && v.y < this.height) {
+        var way = this.getCell(v.x, v.y);
+        if (way && way.bias > 0) {
+          ways.push(way);
+        }
       }
     }
 
-    if (c.x + 1 < this.width) {
-      var right = this.getCell(c.x + 1, c.y);
-      if (right && right.bias > 0) {
-        a.push(right);
-      }
-    }
-    if (c.y - 1 >= 0) {
-      var up = this.getCell(c.x, c.y - 1);
-      if (up && up.bias > 0) {
-        a.push(up);
-      }
-    }
-    if (c.y + 1 < this.height) {
-      var down = this.getCell(c.x, c.y + 1);
-      if (down && down.bias > 0) {
-        a.push(down);
-      }
-    }
-    return a;
+    return ways;
   }
-  this.findBestInArray = function(cells, start, end) {
+
+  this.findBest = function(array, start, end) {
     // This operation can occur in O(1) time if open is a min-heap or a priority queue
     var best = null;
-    for (var i = 0; i < cells.length; i++) {
-      if (!best || cells[i].wayCost(start, end) < best.wayCost(start, end)) {
-        best = cells[i];
+    for (var i = 0; i < array.length; i++) {
+      if (!best || array[i].wayCost(start, end) < best.wayCost(start, end)) {
+        best = array[i];
       }
     }
     return best;
   }
-  this.findCellInArray = function(cells, x, y) {
-    for(var i=0; i<cells.length; i++) {
-      if (cells[i].y == y && cells[i].x == x) {
-        return true;
-      }
-    }
-    return false;
-  }
-  this.removeCellInArray = function(cells, x, y) {
-    for(var i=0; i<cells.length; i++) {
-      if (cells[i].y == y && cells[i].x == x) {
-        cells.splice(i,1);
-        return true;
-      }
-    }
-    return false;
-  }
-  this.findWay = function(start, end) {
+
+
+  this.findWay = function(start, end, diagonal) {
     if (this.locked) {
       return null;
     }
+
     this.locked = true;
     var open = [];
     var closed = [];
@@ -132,10 +106,10 @@ function Grid (width, height) {
     open.push(start);
     var runs = 0;
     while (open.length > 0) {
-      var current = this.findBestInArray(open, start, end);
+      var current = this.findBest(open, start, end);
 
       if (current == end) {
-        console.log('Found in ' + runs)
+        console.log('Found in ' + runs + ' ' + open.length + ' open ' + closed.length + ' closed')
         var c = current;
         var way = [];
         while(c) {
@@ -145,22 +119,32 @@ function Grid (width, height) {
         this.locked = false;
         return way;
       }
-      var ways = this.waysFromCell(current);
+      var ways = this.waysFromCell(current, diagonal);
 
       for (var i = 0; i < ways.length; i++) {
         var w = ways[i];
-        if (!this.findCellInArray(closed, w.x, w.y)) {
-          if (!w.parent || current.wayCost(start, end) < w.parent.wayCost(start, end)) {
-            // This way is better than the previous one
+        // if this way is not on the closed list
+        if (closed.indexOf(w) == -1) {
+          // add w to the open list if it is not already there
+          if (open.indexOf(w) == -1) {
             w.parent = current;
-          }
-          if (!this.findCellInArray(open, w.x, w.y)) {
             open.push(w);
           }
+          // if it is on the open list check to see if this way is better
+          else if (!w.parent || current.wayCost(start, end) < w.parent.wayCost(start, end)) {
+            // this way is better than the previous one
+            w.parent = current;
+          }
+
         }
       }
-      this.removeCellInArray(open, current.x, current.y);
-      if (!this.findCellInArray(closed, current.x, current.y)) {
+      // remove currnet from open
+      var index = open.indexOf(current);
+
+      open.splice(index, 1);
+      // add current to the open list if it is not already there
+      if (closed.indexOf(current) == -1) {
+        console.log('push to closed')
         closed.push(current);
       }
 
@@ -176,32 +160,11 @@ function Grid (width, height) {
     return null;
 
   }
-
-
-  /*
-  //https://pavcreations.com/tilemap-based-a-star-algorithm-implementation-in-unity-game/
-  //http://theory.stanford.edu/~amitp/GameProgramming/AStarComparison.html
-
-  OPEN_LIST
-  CLOSED_LIST
-  ADD start_cell to OPEN_LIST
-
-  LOOP
-      current_cell = cell in OPEN_LIST with the lowest F_COST
-      REMOVE current_cell from OPEN_LIST
-      ADD current_cell to CLOSED_LIST
-
-  IF current_cell is finish_cell
-      RETURN
-
-  FOR EACH adjacent_cell to current_cell
-      IF adjacent_cell is unwalkable OR adjacent_cell is in CLOSED_LIST
-          SKIP to the next adjacent_cell
-
-      IF new_path to adjacent_cell is shorter OR adjacent_cell is not in OPEN_LIST
-          SET F_COST of adjacent_cell
-          SET parent of adjacent_cell to current_cell
-          IF adjacent_cell is not in OPEN_LIST
-              ADD adjacent_cell to OPEN_LIST
-              */
 }
+
+
+/* references
+https://pavcreations.com/tilemap-based-a-star-algorithm-implementation-in-unity-game/
+http://theory.stanford.edu/~amitp/GameProgramming/AStarComparison.html
+https://medium.com/@nicholas.w.swift/easy-a-star-pathfinding-7e6689c7f7b2
+*/

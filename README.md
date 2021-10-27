@@ -14,6 +14,7 @@ bias is a number which determines the "walkability" of the cell
 * 0 = not walkable
 * 1 = walkable with no weight
 * 2 or more = the wayfinding algorithm will favor this cell by the amount above 1
+* 
 parent is used by the wayfinding algorithm and can be null
 
 **cell.x**

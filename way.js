@@ -3,13 +3,20 @@ function Cell (x, y, bias, parent = null) {
   this.y = y;
   this.bias = bias;
   this.parent = parent;
+
   this.wayCost = function(start, end) {
     // distance from start
-    var g = Math.abs(this.x - start.x) + Math.abs(this.y - start.y);
+    var g = 1;
+    var c = this;
+    while(c) {
+      c=c.parent;
+      g++
+    }
+
     // distance from end
     var h = Math.abs(this.x - end.x) + Math.abs(this.y - end.y);
     // bias
-    return g + h - this.bias;
+    return g + h - this.bias + 1;
   }
 }
 
@@ -113,7 +120,8 @@ function Grid (width, height) {
         var c = current;
         var way = [];
         while(c) {
-          way.unshift({x:c.x, y:c.y});
+          //way.unshift({x:c.x, y:c.y});
+          way.unshift(c);
           c = c.parent;
         }
         this.locked = false;

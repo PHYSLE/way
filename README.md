@@ -8,6 +8,7 @@ Wayfinding with A* in JS
 **new Cell (x, y, bias, parent = null)**
 
 The constructor
+
 x, y are the coordinates on the Grid
 bias is a number which determines the "walkability" of the cell
   0 = not walkable
@@ -36,6 +37,7 @@ Returns the cost of this cell in relation to the starting and ending cells
 **new Grid (width, height)**
 
 The constructor
+
 width and height sets the size of the grid
 
 **grid.width**

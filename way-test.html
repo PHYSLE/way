@@ -2,13 +2,14 @@
 <html>
 <head>
 <style>
-  td {border: 1px solid #ccc; width:20px; height: 20px;}
+  body {font-family: sans-serif;}
+  td {border: 1px solid #ccc; width:24px; height: 24px; color: #fff; font-size:11px;}
   td.block {background-color: #000;}
   td:not(.block) {cursor:pointer;}
 </style>
 <script src="way.js"></script>
 <script>
-var grid = new Grid(10, 10);
+var grid = new Grid(20, 20);
 for(var x=0; x < grid.width; x++) {
   for(var y=0; y < grid.height; y++) {
     var b = Math.floor(Math.random() * 4);
@@ -32,7 +33,7 @@ grid.eachCell(function(c) {
     y = c.y;
   }
   if (c.bias == 0 ) {
-    html += '<td id="'+c.x+'_'+c.y+'" class="block">&nbsp;</td>'
+    html += '<td id="'+c.x+'_'+c.y+'" class="block"></td>'
   }
   else {
     html += '<td id="'+c.x+'_'+c.y+'" onclick="findWay('+c.x+','+c.y+')"></td>'
@@ -41,33 +42,29 @@ grid.eachCell(function(c) {
 html += '</tr></table>';
 
 function findWay(x,y) {
+  var start = grid.getCell(0,0);
+  var end = grid.getCell(x,y);
   grid.eachCell(function(c) {
     if (c.bias) {
       var el = document.getElementById(c.x + '_' + c.y);
       el.style.backgroundColor = '#fff';
+      el.innerHTML = "";
     }
   });
-  var way = grid.findWay(grid.getCell(0,0),grid.getCell(x,y));
+  var way = grid.findWay(start, end);
 
   if (way) {
     for (var w=0; w<way.length; w++) {
       var el = document.getElementById(way[w].x + '_' + way[w].y);
       el.style.backgroundColor = '#900';
+      el.innerHTML = w + '<br />' + way[w].wayCost(start, end);
     }
-    document.getElementById('message').innerHTML = "PATH LENGTH: " + way.length;
-  }
-  else {
-    document.getElementById('message').innerHTML = "NO PATH";
   }
 }
 </script>
 </head>
-<body>
+<body onload="document.getElementById('output').innerHTML = html;">
+<a href="way-test.html">Refresh</a>
 <div id="output"></div>
-<div id="message"></div>
-<script>
-document.getElementById('output').innerHTML = html;
-document.getElementById('message').innerHTML = grid.count + ' CELL GRID';
-</script>
 </body>
 </html>

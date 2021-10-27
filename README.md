@@ -62,10 +62,12 @@ Will call the function fn(cell) on each cell in the grid
 
 **grid.waysFromCell(cell, diagonal)**
 Returns an array of a cell's neighboring cells which have a bias greater than zero
+
 diagonal is a bool which if set to true will return cells in the 4 diagonal directions as well as the 4 cardinal directions
 
 **grid.findWay(start, end, diagonal)**
 Returns the path from the start cell to the end cell
+
 diagonal is a bool which if set to true will return cells in the 4 diagonal directions as well as the 4 cardinal directions
 
 **grid.locked**

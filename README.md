@@ -93,7 +93,8 @@ Will call the function fn(cell) on each cell in the grid
 Returns an array of a cell's neighboring cells which have a bias greater than zero [^1]
 
 **grid.findWay(start, end, diagonal = false, heuristic = undefined)**
-Returns the path from the start cell to the end cell [^1]
+Returns the path from the start cell to the end cell [^1][^2]
 
 
 [^1]: diagonal is a bool which if set to true will return cells in the 4 diagonal directions as well as the 4 cardinal directions
+[^2]: findWay allows a user defined heuristic function which takes the start and end cells and returns the estimated distance. The default is to use a [Taxicab Hueristic](https://en.wikipedia.org/wiki/Taxicab_geometry)

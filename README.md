@@ -1,6 +1,6 @@
 # Way.js
 
-Way.js is a wayfinding library which uses the [A* algorithm|https://en.wikipedia.org/wiki/A*_search_algorithm] implemented in JavaScript.
+Way.js is a wayfinding library which uses the [A* algorithm](https://en.wikipedia.org/wiki/A*_search_algorithm) implemented in JavaScript.
 
 ```
 var grid = new Grid(5, 5);

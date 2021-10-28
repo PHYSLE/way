@@ -3,20 +3,10 @@ function Cell (x, y, bias, parent = null) {
   this.y = y;
   this.bias = bias;
   this.parent = parent;
-  // @todo - keep a running tally of g and lose the while loop
-  this.wayCost = function(start, end) {
-    // distance from start
-    var g = 1;
-    var c = this;
-    while(c) {
-      c=c.parent;
-      g++
-    }
-
-    // distance from end
-    var h = Math.abs(this.x - end.x) + Math.abs(this.y - end.y);
-    // bias
-    return g + h - this.bias + 1;
+  this.g = 0;
+  this.h = 0;
+  this.wayCost = function() {
+    return this.g + this.h - this.bias + 1;
   }
 }
 
@@ -85,42 +75,33 @@ function Grid (width, height) {
     return ways;
   }
 
-  this.findBest = function(array, start, end) {
-    // @todo - could we sort open by wayCost desc and take open[0]?
-    var best = null;
-    for (var i = 0; i < array.length; i++) {
-      if (!best || array[i].wayCost(start, end) < best.wayCost(start, end)) {
-        best = array[i];
-      }
-    }
-    return best;
-  }
-
-
-  this.findWay = function(start, end, diagonal) {
-    if (this.locked) {
-      return null;
-    }
-
-    this.locked = true;
+  this.findWay = function(start, end, diagonal = false, heuristic = undefined) {
     var open = [];
     var closed = [];
 
+    if (!heuristic) {
+      heuristic = function(s, e) {
+        return Math.abs(s.x - e.x) + Math.abs(s.y - e.y);
+      }
+    }
+
     this.eachCell(function(c) {
       c.parent = null;
+      c.g = 0;
+      c.h = heuristic(start, end);
     });
 
     open.push(start);
     var runs = 0;
     while (open.length > 0) {
-      var current = this.findBest(open, start, end);
+      // we're keeping open sorted by wayCost so the best option should be at [0]
+      var current = open[0];
 
       if (current == end) {
         console.log('Found in ' + runs + ' ' + open.length + ' open ' + closed.length + ' closed')
         var c = current;
         var way = [];
         while(c) {
-          //way.unshift({x:c.x, y:c.y});
           way.unshift(c);
           c = c.parent;
         }
@@ -136,16 +117,24 @@ function Grid (width, height) {
           // add w to the open list if it is not already there
           if (open.indexOf(w) == -1) {
             w.parent = current;
+            w.g = current.g + 1;
             open.push(w);
           }
           // if it is on the open list check to see if this way is better
           else if (!w.parent || current.wayCost(start, end) < w.parent.wayCost(start, end)) {
             // this way is better than the previous one
             w.parent = current;
+            w.g = current.g + 1;
           }
 
         }
       }
+
+      // sort open by wayCost
+      open.sort(function(a,b) {
+        return a.wayCost() - b.wayCost();
+      });
+
       // remove currnet from open
       var index = open.indexOf(current);
 
@@ -164,7 +153,6 @@ function Grid (width, height) {
       runs++;
     }
     console.log('Blocked')
-    this.locked = false;
     return null;
 
   }

@@ -84,7 +84,7 @@ Returns the cell at the x, y coordinates or undefined if there is no cell found
 Adds or overwrites the cell at the cell.x, cell.y coordinates on the grid
 
 **grid.removeCell(x, y)**
-Removes the cell at the x, y coordinates or undefined if there is no cell found
+Removes the cell at the x, y coordinates
 
 **grid.eachCell(fn)**
 Will call the function fn(cell) on each cell in the grid

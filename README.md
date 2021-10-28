@@ -25,7 +25,7 @@ console.log(JSON.stringify(way));
 
 ### Cell
 
-The constructor
+#### Constructor
 
 **new Cell (x, y, bias)**
 
@@ -35,6 +35,8 @@ bias is a number which determines the "walkability" of the cell
 * 0 = not walkable
 * 1 = walkable with no weight
 * 2 or more = the wayfinding algorithm will favor this cell by the amount above 1
+
+#### Object members
 
 **cell.x**
 The x position of the cell
@@ -54,11 +56,13 @@ Returns the cost of this cell after calling grid.findWay
 
 ### Grid
 
-The constructor
+#### Constructor
 
 **new Grid (width, height)**
 
 width and height sets the size of the grid
+
+#### Object members
 
 **grid.width**
 The width of the grid

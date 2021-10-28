@@ -31,7 +31,7 @@ The bias for the cell
 The cell's parent cell or null
 
 **cell.wayCost()**
-Returns the cost of this cell in relation to the starting and ending cells
+Returns the cost of this cell after calling grid.findWay
 
 
 ### Grid

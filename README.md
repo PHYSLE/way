@@ -6,7 +6,7 @@ var grid = new Grid(5, 5);
 
 for(var x=0; x < grid.width; x++) {
   for(var y=0; y < grid.height; y++) {
-    var bias = y == 3 && x < 3 ? 1 : 0;
+    var bias = (y == 3 && x < 4 ? 0 : 1);
     var cell = new Cell(x, y, bias);
 
     grid.setCell(cell);
@@ -17,7 +17,7 @@ var start = grid.getCell(0, 0);
 var goal = grid.getCell(0, 4);
 var way = grid.findWay(start, goal);
 
-console.log(Json.stringify(way));
+console.log(JSON.stringify(way));
 
 ```
 

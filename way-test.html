@@ -3,12 +3,16 @@
 <head>
 <style>
   body {font-family: sans-serif;}
-  td {border: 1px solid #ccc; width:24px; height: 24px; color: #fff; font-size:11px;}
+  td {border: 1px solid #ccc; width:25px; height: 25px; color: #fff; font-size:10px;}
   td.block {background-color: #000;}
   td:not(.block) {cursor:pointer;}
+  div.left {display:inline-flex;}
+  div.right {display:inline-flex; margin-left:480px;}
 </style>
 <script src="way.js"></script>
 <script>
+
+// create a grid with raondom barriers
 var grid = new Grid(20, 20);
 for(var x=0; x < grid.width; x++) {
   for(var y=0; y < grid.height; y++) {
@@ -22,7 +26,7 @@ for(var x=0; x < grid.width; x++) {
   }
 }
 
-
+// create an html table to display the grid
 var html = '<table><tr>'
 var y = 0;
 grid.eachCell(function(c) {
@@ -42,6 +46,9 @@ html += '</tr></table>';
 function findWay(x,y) {
   var start = grid.getCell(0,0);
   var end = grid.getCell(x,y);
+  var diagonal = document.getElementById('diagonal').checked;
+
+  // clean up the html table
   grid.eachCell(function(c) {
     if (c.bias) {
       var el = document.getElementById(c.x + '_' + c.y);
@@ -49,8 +56,11 @@ function findWay(x,y) {
       el.innerHTML = "";
     }
   });
-  var way = grid.findWay(start, end);
 
+  // find the path
+  var way = grid.findWay(start, end, diagonal);
+
+  // display the path
   if (way) {
     for (var w=0; w<way.length; w++) {
       var el = document.getElementById(way[w].x + '_' + way[w].y);
@@ -61,8 +71,14 @@ function findWay(x,y) {
 }
 </script>
 </head>
+
 <body onload="document.getElementById('output').innerHTML = html;">
-<a href="way-test.html">Refresh</a>
-<div id="output"></div>
+  <div class="left">
+    <a href="way-test.html">Refresh</a>
+  </div>
+  <div class="right">
+    <input type="checkbox" id="diagonal"> <label for="diagonal">Diagonal</label>
+  </div>
+  <div id="output"></div>
 </body>
 </html>

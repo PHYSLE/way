@@ -10,6 +10,7 @@ The constructor
 **new Cell (x, y, bias, parent = null)**
 
 x, y are the coordinates on the Grid
+
 bias is a number which determines the "walkability" of the cell
 * 0 = not walkable
 * 1 = walkable with no weight

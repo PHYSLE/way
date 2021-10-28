@@ -71,10 +71,5 @@ Returns an array of a cell's neighboring cells which have a bias greater than ze
 **grid.findWay(start, end, diagonal = false, heuristic = undefined)**
 Returns the path from the start cell to the end cell ✰
 
-**grid.locked**
-When the grid is in the process of way finding it is locked until completed and will return null to findWay calls
-
-
-
 
 ✰ diagonal is a bool which if set to true will return cells in the 4 diagonal directions as well as the 4 cardinal directions

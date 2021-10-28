@@ -5,9 +5,9 @@ Wayfinding with A* in JS
 
 ### Cell
 
-**new Cell (x, y, bias, parent = null)**
-
 The constructor
+
+**new Cell (x, y, bias, parent = null)**
 
 x, y are the coordinates on the Grid
 bias is a number which determines the "walkability" of the cell
@@ -29,15 +29,15 @@ The bias for the cell
 **cell.parent**
 The cell's parent cell or null
 
-**cell.wayCost(start, end)**
+**cell.wayCost()**
 Returns the cost of this cell in relation to the starting and ending cells
 
 
 ### Grid
 
-**new Grid (width, height)**
-
 The constructor
+
+**new Grid (width, height)**
 
 width and height sets the size of the grid
 
@@ -66,10 +66,10 @@ Removes the cell at the x, y coordinates or undefined if there is no cell found
 Will call the function fn(cell) on each cell in the grid
 
 **grid.waysFromCell(cell, diagonal)**
-Returns an array of a cell's neighboring cells which have a bias greater than zero✰
+Returns an array of a cell's neighboring cells which have a bias greater than zero ✰
 
-**grid.findWay(start, end, diagonal)**
-Returns the path from the start cell to the end cell✰
+**grid.findWay(start, end, diagonal = false, heuristic = undefined)**
+Returns the path from the start cell to the end cell ✰
 
 **grid.locked**
 When the grid is in the process of way finding it is locked until completed and will return null to findWay calls

@@ -7,7 +7,7 @@ Wayfinding with A* in JS
 
 The constructor
 
-**new Cell (x, y, bias, parent = null)**
+**new Cell (x, y, bias)**
 
 x, y are the coordinates on the Grid
 

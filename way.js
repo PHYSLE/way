@@ -100,7 +100,7 @@ function Grid (width, height) {
       var current = open[0];
 
       if (current == end) {
-        console.log('Found in ' + runs + ' ' + open.length + ' open ' + closed.length + ' closed')
+        console.debug('Found in ' + runs + ' ' + open.length + ' open ' + closed.length + ' closed')
         var c = current;
         var way = [];
         while(c) {
@@ -143,18 +143,17 @@ function Grid (width, height) {
       open.splice(index, 1);
       // add current to the open list if it is not already there
       if (closed.indexOf(current) == -1) {
-        console.log('push to closed')
         closed.push(current);
       }
 
       if (runs > this.width * this.height) {
         this.locked = false;
-        console.log('Too Long!')
+        console.debug('Too Long!')
         return null;
       }
       runs++;
     }
-    console.log('Blocked')
+    console.debug('Blocked')
     return null;
 
   }

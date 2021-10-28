@@ -61,7 +61,7 @@ Returns the cost of this cell after calling grid.findWay
 
 **new Grid (width, height)**
 
-width and height sets the size of the grid
+width and height set the size of the grid
 
 #### Object members
 

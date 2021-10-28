@@ -17,7 +17,7 @@ var start = grid.getCell(0, 0);
 var goal = grid.getCell(0, 4);
 var way = grid.findWay(start, goal);
 
-console.log(Json.stringify(way);
+console.log(Json.stringify(way));
 
 ```
 

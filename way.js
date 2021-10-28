@@ -1,8 +1,8 @@
-function Cell (x, y, bias, parent = null) {
+function Cell (x, y, bias) {
   this.x = x;
   this.y = y;
   this.bias = bias;
-  this.parent = parent;
+  this.parent = null;
   this.g = 0;
   this.h = 0;
   this.wayCost = function() {

@@ -1,3 +1,5 @@
+/* Way.js (c) PHYSLE 2021 */
+
 function Cell (x, y, bias) {
   this.x = x;
   this.y = y;
@@ -80,15 +82,15 @@ function Grid (width, height) {
     var closed = [];
 
     if (!heuristic) {
-      heuristic = function(s, e) {
-        return Math.abs(s.x - e.x) + Math.abs(s.y - e.y);
+      heuristic = function(self, goal) {
+        return Math.abs(self.x - goal.x) + Math.abs(self.y - goal.y);
       }
     }
 
     this.eachCell(function(c) {
       c.parent = null;
       c.g = 0;
-      c.h = heuristic(start, end);
+      c.h = heuristic(c, end);
     });
 
     open.push(start);

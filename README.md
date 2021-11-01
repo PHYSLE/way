@@ -90,7 +90,7 @@ Removes the cell at the x, y coordinates
 Will call the function fn(cell) on each cell in the grid
 
 **grid.waysFromCell(cell, diagonal)**
-Returns an array of a cell's neighboring cells which have a bias greater than zero [^1]
+Returns an array of a cell's neighboring cells [^1]
 
 **grid.findWay(start, end, diagonal = false, heuristic = undefined)**
 Returns the path from the start cell to the end cell [^1][^2]

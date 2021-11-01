@@ -68,7 +68,7 @@ function Grid (width, height) {
       }
       if (v.x >= 0 && v.y >= 0 && v.x < this.width && v.y < this.height) {
         var way = this.getCell(v.x, v.y);
-        if (way && way.bias > 0) {
+        if (way) {
           ways.push(way);
         }
       }
@@ -113,6 +113,9 @@ function Grid (width, height) {
       var ways = this.waysFromCell(current, diagonal);
 
       for (var i = 0; i < ways.length; i++) {
+        if (ways[i].bias < 1) {
+          continue;
+        }
         var w = ways[i];
         // if this way is not on the closed list
         if (closed.indexOf(w) == -1) {
